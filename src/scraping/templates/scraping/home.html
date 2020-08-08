@@ -1,29 +1,13 @@
 {% extends "base.html" %}
 
 {% block content%}
-{% if objects_list %}
-<h1>Доступные вкансии</h1>
-<p>Hello, Chert. Here's your Query Set</p>
-{% endif %}
-
-{% for obj in objects_list%}
-<div class="card my-4" >
-  <h5 class="card-header"><a href="{{ obj.url }}">{{ obj.tittle }}</a></h5>
-  <div class="card-body">
-    <h5 class="card-title">{{ obj.company }}</h5>
-    <p class="card-text">{{ obj.description }}</p>
-    <p class="card-city">{{ obj.city.name }} | {{ obj.language.name }} | {{ obj.timestamp|date:"d-m-Y" }}</p>
-  </div>
+<div class="container">
+  <div class="col "><h2 class="text-center my-3">Сервис по сбору и рассылки вакансий</h2></div>
 </div>
-
-{% empty %}
-  <p>Hello, Chert. What are you looking here?!</p>
-  <h5>К сожалению, по Вашему запросу, ничего не найдено.</h5>
-{% endfor %}
-
 <div class="row">
-  <div class="col-md-6 mx-auto">
-    <form method="GET" action="">
+  <div class="col-md-8 mx-auto">
+    <p4 class="text-center my-2">Для просмотора дотупных вакансий заполните поля</p4>
+    <form method="GET" action="{% url 'list' %}">
       <div class="form-group">
         {{ form.as_p }}
       </div>
@@ -31,9 +15,6 @@
     </form>
   </div>
 </div>
-
-
-
 
 {% endblock %}
 

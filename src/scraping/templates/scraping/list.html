@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content%}
+
+{% if objects_list %}
+<h1>Доступные вкансии</h1>
+<p>Hello, Chert. Here's your Query Set</p>
+{% endif %}
+
+
+{% for obj in objects_list%}
+<div class="card my-4" >
+  <h5 class="card-header"><a href="{{ obj.url }}">{{ obj.tittle }}</a></h5>
+  <div class="card-body">
+    <h5 class="card-title">{{ obj.company }}</h5>
+    <p class="card-text">{{ obj.description }}</p>
+    <p class="card-city">{{ obj.city.name }} | {{ obj.language.name }} | {{ obj.timestamp|date:"d-m-Y" }}</p>
+  </div>
+</div>
+
+{% empty %}
+  <p>Hello, Chert. What are you looking here?!</p>
+  <h5>К сожалению, по Вашему запросу, ничего не найдено.</h5>
+{% endfor %}
+
+<div class="row">
+  <div class="col">
+      {% if objects_list %}
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+              {% if objects_list.has_previous %}
+              <li class="page-item">
+                  <a class="page-link" href="?city={{city}}&language={{language}}&page={{ objects_list.previous_page_number }}" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                  </a>
+              </li>
+              {% endif %}
+              {% for page in objects_list.paginator.page_range %}
+              <li class="page-item {% if page == objects_list.number%}active{% endif %}">
+                  <a class="page-link" href="?city={{ city }}&language={{ language }}&page={{page}}">{{page}}</a></li>
+              {% endfor %}
+
+              {% if objects_list.has_next %}
+              <li class="page-item">
+                  <a class="page-link" href="?city={{ city }}&language={{ language }}&page={{ objects_list.next_page_number }}" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                  </a>
+              </li>
+              {% endif %}
+          </ul>
+        </nav>
+      {% endif %}
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-6 mx-auto">
+    <form method="GET" action="{% url 'list' %}">
+      <div class="form-group">
+        {{ form.as_p }}
+      </div>
+      <button type="submit" class="btn btn-primary">Найти</button>
+    </form>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+
+
+
+
