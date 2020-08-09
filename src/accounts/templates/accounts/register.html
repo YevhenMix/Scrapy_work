@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content%}
+
+<div class="row">
+  <div class="col-md-8 mx-auto">
+    <p4 class="text-center my-2">Регистрация нового пользоателя</p4>
+    <form method="POST" action="">{% csrf_token %}
+      <div class="form-group">
+        {{ form.as_p }}
+      </div>
+      <button type="submit" class="btn btn-primary">Зарегестрироваться</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
