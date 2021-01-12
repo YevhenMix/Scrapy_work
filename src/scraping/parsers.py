@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup as BS
 import json
 import re
 from random import randint
-
 __all__ = ('work', 'rabota', 'dou', 'djinni')
 
 headers = [
@@ -55,13 +54,13 @@ def rabota(url, city=None, language=None):
         if resp.status_code == 200:
             resp = resp.text
             soup = BS(resp, 'html.parser')
-            table = soup.find('table', attrs={'id': 'ctl00_content_ctl00_gridList'})
+            table = soup.find('table', attrs={'id': 'ctl00_content_vacancyList_gridList'})
             job_lst = table.find_all('tr', attrs={'id': True})
             if job_lst:
                 for tr in job_lst:
                     body = tr.find('div', attrs={'class': 'card-body'})
-                    tittle = body.find('p', attrs={'class': 'card-title'}).find('a').text
-                    href = body.find('p', attrs={'class': 'card-title'}).a['href']
+                    tittle = body.find('h2', attrs={'class': 'card-title'}).find('a').text
+                    href = body.find('h2', attrs={'class': 'card-title'}).a['href']
                     description = body.find('div', attrs={'class': 'card-description'}).text
                     company = body.find('p', attrs={'class': 'company-name'}).a.text
                     vacancy.append({'tittle': tittle, 'url': domain + href, 'description': description, 'company': company,
