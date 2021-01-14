@@ -12,7 +12,7 @@ sys.path.append(proj)
 os.environ["DJANGO_SETTINGS_MODULE"] = "scraping_aggregator.settings"
 
 django.setup()
-from scraping.models import Vacancy, Error
+from scraping.models import Vacancy, Error, Url, City, Language
 
 today = datetime.date.today()
 subject = f"Рассылка вакансий за {today} "
@@ -55,15 +55,48 @@ if users_dct:
     #         msg.send()
 
 qs = Error.objects.filter(timestamp=today)
+subject = ''
+text_content = ''
+to = ADMIN_USER
+_html = ''
 if qs.exists():
     error = qs.first()
-    data = error.data
-    _html = ''
+    data = error.data['errors']
     for i in data:
         _html += f'<p><a href="{ i["url"] }"> Error: { i["title"] }</a></p>'
     subject = f'Оштибки скрапинга за {today}'
     text_content = f'Оштибки скрапинга за {today}'
-    to = ADMIN_USER
+
+    data = error.data['user_data']
+
+    if data:
+        _html += '<hr>'
+        _html += '<h2> Пожелания пользователей </h2>'
+
+    for i in data:
+        _html += f'<p>City: {i["city"]}, Language: {i["language"]} Email: {i["email"]}</p>'
+    subject = f'Пожелания пользователей за {today}'
+    text_content = f'Пожелания пользователей за {today}'
+
+
+qs = Url.objects.all().values('city', 'language',)
+urls_dct = {(i['city'], i['language']): True for i in qs}
+urls_errors = ''
+
+for keys in users_dct.keys():
+    if keys not in urls_dct:
+        if keys[0] and keys[1]:
+            city = City.objects.get(id=keys[0])
+            language = Language.objects.get(id=keys[1])
+            urls_errors += f'<p> Для города {city} и языка программирования {language} отсутсвуют урлы</a></p>'
+if urls_errors:
+    _html += '<hr>'
+    _html += '<h2> Отсутсвующие урлы </h2>'
+    subject += ' Отсутсвующие урлы'
+    _html += urls_errors
+
+if subject:
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(_html, 'text/html')
     msg.send()
+
