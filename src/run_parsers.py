@@ -39,8 +39,10 @@ def get_urls(_settings):
             tmp = {}
             tmp['city'] = pair[0]
             tmp['language'] = pair[1]
-            tmp['url_data'] = url_dict[pair]
-            urls.append(tmp)
+            url_data = url_dict.get(pair)
+            if url_data:
+                tmp['url_data'] = url_dict.get(pair)
+                urls.append(tmp)
     return urls
 
 
@@ -58,16 +60,11 @@ loop = asyncio.get_event_loop()
 tmp_tasks = [(func, data['url_data'][key], data['city'], data['language'])
              for data in url_lst
              for func, key in parsers]
-tasks = asyncio.wait([loop.create_task(main(f)) for f in tmp_tasks])
-'''for data in url_lst:
-    for func, key in parsers:
-        url = data['url_data'][key]
-        j, e = func(url, city=data['city'], language=data['language'])
-        vacancy += j
-        errors += e'''
+if tmp_tasks:
+    tasks = asyncio.wait([loop.create_task(main(f)) for f in tmp_tasks])
+    loop.run_until_complete(tasks)
+    loop.close()
 
-loop.run_until_complete(tasks)
-loop.close()
 
 for job in vacancy:
     v = Vacancy(**job)
@@ -84,5 +81,9 @@ if errors:
         err.save()
     else:
         er = Error(data=f'errors: {errors}').save()
+
+
+delete_old_post = dt.date.today() - dt.timedelta(10)
+Vacancy.objects.filter(timestamp__lte=delete_old_post).delete()
 
 
