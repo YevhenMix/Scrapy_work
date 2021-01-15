@@ -1,0 +1,9 @@
+@font-face{
+    font-family: EastSeaDokdo-Regular;
+    src: (../fonts/EastSeaDokdo-Regular.ttf);
+}
+
+#brand {
+    font-family: EastSeaDokdo-Regular;
+    color: rgba(0,0,0,.9);
+}

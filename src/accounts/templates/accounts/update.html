@@ -13,7 +13,7 @@
     </form>
     <form method="POST" action="{% url 'accounts:delete' %}">{% csrf_token %}
       <div class="form-group"></div>
-      <button type="submit" class="btn btn-danger my-2">Удалить</button>
+      <button type="submit" class="btn btn-danger my-2">Удалить аккаунт!</button>
     </form>
   </div>
 </div>
@@ -23,14 +23,24 @@
   <div class="col-md-8 mx-auto">
     <p class="text-center my-4">Если вы не нашли подходящий набор Город - Язык программировния
       Вы можете заполнить форму ниже с вашими пожеланиями. После того как необходимые данные будут добавлены Вы
-      получите письмо на указанный Вами email
+      получите письмо на указанный Вами e-mail.
     </p>
-    <form method="POST" action="{% url 'accounts:contact' %}">{% csrf_token %}
-      <div class="form-group">
-        {{ contact_form.as_p }}
+    <p>
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Показать форму
+      </button>
+    </p>
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+        <form method="POST" action="{% url 'accounts:contact' %}">{% csrf_token %}
+          <div class="form-group">
+            {{ contact_form.as_p }}
+          </div>
+          <button type="submit" class="btn btn-primary">Отправить</button>
+        </form>
       </div>
-      <button type="submit" class="btn btn-primary">Отправить</button>
-    </form>
+    </div>
+
   </div>
 </div>
 
