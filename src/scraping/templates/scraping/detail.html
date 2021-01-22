@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %} Список вакансий {% endblock %}
+
+{% block content%}
+
+<div class="card my-4" >
+  <h5 class="card-header"><a href="{{ vacancy.url }}">{{ vacancy.tittle }}</a> | {{ vacancy.company }} </h5>
+  <div class="card-body">
+    <p class="card-text">{{ vacancy.description }}</p>
+    <p class="card-city">{{ vacancy.city.name }} | {{ vacancy.language.name }} | {{ vacancy.timestamp|date:"d-m-Y" }}</p>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+
