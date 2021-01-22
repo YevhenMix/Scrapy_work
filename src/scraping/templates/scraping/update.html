@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %} Список вакансий {% endblock %}
+
+{% block content%}
+
+<div class="card my-4" >
+  <div class="card-body">
+    <p class="card-text">
+      <form method="post"> {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+      </form>
+    </p>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+
