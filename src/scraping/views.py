@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render
-from django.views.generic import DetailView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView, CreateView
 
 from scraping.models import Vacancy
 from scraping.forms import SearchForm
@@ -65,3 +66,9 @@ class VList(ListView):
             qs = Vacancy.objects.filter(**_filter)
         return qs
 
+
+class VCreate(CreateView):
+    model = Vacancy
+    fields = '__all__'
+    success_url = reverse_lazy('home')
+    template_name = 'scraping/create.html'
